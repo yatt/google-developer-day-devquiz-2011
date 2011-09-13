@@ -22,7 +22,6 @@ char inverseOperation(char op)
 
 const char *SEQUENCE = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 map<char, int> NUMS;
-char OPERATABLES[7][7][5][36];
 char origs[5000][37];
 int moveto[7][7][4];
 
@@ -63,23 +62,6 @@ public:
     {
         strcpy(grid, orig);
 
-/*
-        // apply
-        deque<char> seq;
-        for (int i = 0; i < h*w - 1; i++)
-        {
-            char ch = SEQUENCE[i];
-            if (strchr(grid, ch) == NULL)
-                seq.push_back(ch);
-        }
-        for (int i = 0; i < h*w; i++)
-            if (grid[i] == '=')
-            {
-                grid[i] = seq[0];
-                seq.pop_front();
-            }
-*/
-    
         opHist.clear();
         opHist.push_back(N);
         
@@ -117,16 +99,13 @@ public:
     
     char operatables()
     {
-        //char o = OPERATABLES[h][w][opHist.back()][zeroAt];
         char o = 0;
         int i = zeroAt / w;
         int j = zeroAt % w;
-//printf("before %d\n", o);
         if (i >   0 && grid[zeroAt-w] != '=' && opHist.back() != D) o |= (1 << U);
         if (i < h-1 && grid[zeroAt+w] != '=' && opHist.back() != U) o |= (1 << D);
         if (j >   0 && grid[zeroAt-1] != '=' && opHist.back() != R) o |= (1 << L);
         if (j < w-1 && grid[zeroAt+1] != '=' && opHist.back() != L) o |= (1 << R);
-//printf("after  %d\n", o);
         return o;
     }
 
@@ -211,17 +190,6 @@ public:
     }
 };
 
-void _opable(int h, int w, int preop, int i, int j)
-{
-    char *p = &(OPERATABLES[h][w][preop][i*w+j]);
-    *p = 0;
-    if (i >   0 && preop != D) *p |= 1 << U;
-    if (i < h-1 && preop != U) *p |= 1 << D;
-    if (j >   0 && preop != R) *p |= 1 << L;
-    if (j < w-1 && preop != L) *p |= 1 << R;
-//if (h==3&&w==4)printf("%d,%d at %d,%d, op=%c => %d%d%d%d\n", h, w, i, j, REPR[preop], (*p >> 0) & 1, (*p >> 1) & 1,(*p >> 2) & 1,(*p >> 3) & 1 );
-}
-
 void pazzleInit()
 {
     // VAL
@@ -230,16 +198,6 @@ void pazzleInit()
     VAL['L'] = L;
     VAL['R'] = R;
 
-    // operatables
-    for (int h = 3; h <= 6; h++)
-        for (int w = 3; w <= 6; w++)
-            for (int preop = 0; preop < 5; preop++)
-                for (int i = 0; i < h; i++)
-                    for (int j = 0; j < w; j++)
-                        _opable(h, w, preop, i, j);
-
-    // lowerbound
-    
     // nums
     for (int i = 0; SEQUENCE[i] != '\0'; i++)
         NUMS[SEQUENCE[i]] = i;

@@ -71,15 +71,10 @@ string search(Pazzle& _pazzle)
             
             pazzle.operate(op);
             if (pazzle.isComplete())
-{
-//cout << pazzle.toString() << endl;
-//cout << pazzle.ope() << endl
                 return pazzle.operations();
-}
+
             if (depth < maxdepth && !isCut(depth, pazzle))
-            {
                 q->push(QueueItem(pazzle, pazzle.eval(), depth + 1));
-            }
             pazzle.undo();
         }
     }
@@ -258,7 +253,6 @@ cout << "@ INITIALIZATION COMPLETE" << endl;
         if (p.h <= maxheight && p.w <= maxwidth)
         {
             string oplst = trySolve(p);
-//printf(" %d  result '%s'\n",i+1, oplst.c_str());
             if (oplst != "")
             {
                 printf("%d %d %d %s\n", i+1, p.h, p.w, oplst.c_str());
@@ -267,7 +261,6 @@ cout << "@ INITIALIZATION COMPLETE" << endl;
             }
         }
     }
-    //serialize();
     
     return 0;
 }
